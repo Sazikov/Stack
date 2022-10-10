@@ -18,15 +18,13 @@ enum StackErrors
     NOERR = 0,
     STACKPTRERR = 1,
     DATAERR = 2,
-    SIZERR = 4,
-    CAPERR = 8,
-    SIZENCAPERR = 16,
-    LEFTCANERR = 32,
-    RIGHTCANERR = 64,
-    LEFTDATACANERR = 128,
-    RIGHTDATACANERR = 256,
-    DATAHASHERR = 512,
-    STACKHASHERR = 1024
+    SIZEBIGGERTHANCAPERR = 4,
+    LEFTCANERR = 8,
+    RIGHTCANERR = 16,
+    LEFTDATACANERR = 32,
+    RIGHTDATACANERR = 64,
+    DATAHASHERR = 128,
+    STACKHASHERR = 256
 };
 
 enum SysErrors
@@ -42,13 +40,4 @@ int StackPush(struct stack* stk, const elem_t elem);
 
 int StackDtor(struct stack* stk);
 
-void print(const long x);
-
-void print(const char* x);
-
-void print(const char x);
-
-void print(const double x);
-
-void print(const int x);
 

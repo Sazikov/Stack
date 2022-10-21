@@ -9,6 +9,7 @@ struct stack
     int errors;
     long Data_Hash;
     long Stack_Hash;
+    int created;
     long int right_canary;
 
 };
@@ -16,20 +17,22 @@ struct stack
 enum StackErrors
 {
     NOERR = 0,
-    STACKPTRERR = 1,
-    DATAERR = 2,
-    SIZEBIGGERTHANCAPERR = 4,
-    LEFTCANERR = 8,
-    RIGHTCANERR = 16,
-    LEFTDATACANERR = 32,
-    RIGHTDATACANERR = 64,
-    DATAHASHERR = 128,
-    STACKHASHERR = 256
+    STACKPTRERR = -1,
+    DATAERR = -2,
+    SIZEBIGGERTHANCAPERR = -4,
+    LEFTCANERR = -8,
+    RIGHTCANERR = -16,
+    LEFTDATACANERR = -32,
+    RIGHTDATACANERR = -64,
+    DATAHASHERR = -128,
+    STACKHASHERR = -256,
+    SIZEERR = -512,
+    CREATED = -1024,
 };
 
 enum SysErrors
 {
-    MEMERR = -1
+    MEMERR = -10000
 };
 
 int StackCtor(struct stack* stk, const int capacity);
@@ -40,4 +43,8 @@ int StackPush(struct stack* stk, const elem_t elem);
 
 int StackDtor(struct stack* stk);
 
+void PrintErrors (const int err, const int line, const char* func, const char* file);
+
+const elem_t POISON = 777777;
+const elem_t CANARY = 0xDED32;
 

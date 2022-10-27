@@ -1,0 +1,197 @@
+
+int Poison(stack*, int, int) at src\stack.cpp(83)
+Stack[000000000061fd50] (OK)
+Data_Hash = 0
+{
+	 size = 0
+	capacity = 10
+	data[0000000000891a70]
+	{
+		*[-1] = 912690
+		*[0] = 0
+		*[1] = 0
+		*[2] = 0
+		*[3] = 0
+		*[4] = 0
+		*[5] = 0
+		*[6] = 0
+		*[7] = 0
+		*[8] = 0
+		*[9] = 0
+		*[10] = 912690
+	}
+}
+
+int Poison(stack*, int, int) at src\stack.cpp(95)
+Stack[000000000061fd50] (OK)
+Data_Hash = -567214069
+{
+	 size = 0
+	capacity = 10
+	data[0000000000891a70]
+	{
+		*[-1] = 912690
+		[0] = POISON
+		[1] = POISON
+		[2] = POISON
+		[3] = POISON
+		[4] = POISON
+		[5] = POISON
+		[6] = POISON
+		[7] = POISON
+		[8] = POISON
+		[9] = POISON
+		*[10] = 912690
+	}
+}
+
+int StackCtor(stack*, int) at src\stack.cpp(75)
+Stack[000000000061fd90] (OK)
+Data_Hash = -567214069
+{
+	 size = 0
+	capacity = 10
+	data[0000000000891a70]
+	{
+		*[-1] = 912690
+		[0] = POISON
+		[1] = POISON
+		[2] = POISON
+		[3] = POISON
+		[4] = POISON
+		[5] = POISON
+		[6] = POISON
+		[7] = POISON
+		[8] = POISON
+		[9] = POISON
+		*[10] = 912690
+	}
+}
+
+int StackPush(stack*, elem_t) at src\stack.cpp(134)
+Stack[000000000061fd90] (OK)
+Data_Hash = -567214069
+{
+	 size = 0
+	capacity = 10
+	data[0000000000891a70]
+	{
+		*[-1] = 912690
+		[0] = POISON
+		[1] = POISON
+		[2] = POISON
+		[3] = POISON
+		[4] = POISON
+		[5] = POISON
+		[6] = POISON
+		[7] = POISON
+		[8] = POISON
+		[9] = POISON
+		*[10] = 912690
+	}
+}
+
+int StackPush(stack*, elem_t) at src\stack.cpp(150)
+Stack[000000000061fd90] (OK)
+Data_Hash = 983040
+{
+	 size = 1
+	capacity = 10
+	data[0000000000891a70]
+	{
+		*[-1] = 912690
+		*[0] = 15
+		[1] = POISON
+		[2] = POISON
+		[3] = POISON
+		[4] = POISON
+		[5] = POISON
+		[6] = POISON
+		[7] = POISON
+		[8] = POISON
+		[9] = POISON
+		*[10] = 912690
+	}
+}
+
+elem_t StackPop(stack*) at src\stack.cpp(102)
+Stack[000000000061fd90] (OK)
+Data_Hash = 983040
+{
+	 size = 1
+	capacity = 10
+	data[0000000000891a70]
+	{
+		*[-1] = 912690
+		*[0] = 15
+		[1] = POISON
+		[2] = POISON
+		[3] = POISON
+		[4] = POISON
+		[5] = POISON
+		[6] = POISON
+		[7] = POISON
+		[8] = POISON
+		[9] = POISON
+		*[10] = 912690
+	}
+}
+
+int StackRealloc(stack*, int) at src\stack.cpp(157)
+Stack[000000000061fd40] (OK)
+Data_Hash = -567214069
+{
+	 size = 0
+	capacity = 10
+	data[0000000000891a70]
+	{
+		*[-1] = 912690
+		[0] = POISON
+		[1] = POISON
+		[2] = POISON
+		[3] = POISON
+		[4] = POISON
+		[5] = POISON
+		[6] = POISON
+		[7] = POISON
+		[8] = POISON
+		[9] = POISON
+		*[10] = 912690
+	}
+}
+
+int StackRealloc(stack*, int) at src\stack.cpp(175)
+Stack[000000000061fd40] (OK)
+Data_Hash = 0
+{
+	 size = 0
+	capacity = 5
+	data[0000000000891a70]
+	{
+		*[-1] = 912690
+		[0] = POISON
+		[1] = POISON
+		[2] = POISON
+		[3] = POISON
+		[4] = POISON
+		*[5] = 912690
+	}
+}
+
+elem_t StackPop(stack*) at src\stack.cpp(125)
+Stack[000000000061fd90] (OK)
+Data_Hash = 0
+{
+	 size = 0
+	capacity = 5
+	data[0000000000891a70]
+	{
+		*[-1] = 912690
+		[0] = POISON
+		[1] = POISON
+		[2] = POISON
+		[3] = POISON
+		[4] = POISON
+		*[5] = 912690
+	}
+}

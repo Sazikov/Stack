@@ -61,6 +61,11 @@ int StackCtor (struct stack* stk, const int capacity)
         stk->right_canary = CANARY;
     #endif
     
+    #ifndef HASH_DEBUG
+        stk->Data_Hash = My_Data_Hash (stk);
+        stk->Stack_Hash = My_Stack_Hash (stk);
+    #endif
+
     PrintErrors (Poison (stk, 1, stk->capacity + 1), __LINE__, __PRETTY_FUNCTION__, __FILE__);
 
     #ifndef HASH_DEBUG
@@ -220,7 +225,7 @@ void StackDump (struct stack* stk, const int line, const char* func, const char*
 
     if (stk->data != NULL)
     {
-        for (int i = Canary; i < stk->capacity + 1; i++)
+        for (int i = Canary - 1; i < stk->capacity + 2; i++)
         {
             if (stk->data[i] != POISON)
             {
@@ -269,7 +274,7 @@ long My_Data_Hash (struct stack *stk)
 
     for (int i = 1; i < stk->capacity; i++)
     {
-        Hash += stk->data[i] * i;
+        Hash ^= (stk->data[i] >> 16) ^ (stk->data[i] << 16);
     }
 
     return Hash;
@@ -280,7 +285,7 @@ long My_Data_Hash (struct stack *stk)
 #ifndef HASH_DEBUG
 long My_Stack_Hash (struct stack *stk)
 {
-    return stk->left_canary * 1 + stk->size * 2 + stk->capacity * 2 + stk->errors * 4 + stk->Data_Hash * 5 + stk->right_canary * 6 + (long int) *stk->data * 7 + 8* stk->created;
+    return (stk->left_canary >> 16) ^ (stk->left_canary << 16) ^ (stk->size >> 16) ^ (stk->size << 16) ^ (stk->capacity >> 16) ^  (stk->capacity << 16) ^ (stk->errors >> 16) ^ (stk->errors << 16) ^ (stk->Data_Hash >> 16) ^ (stk->Data_Hash << 16) ^ (stk->right_canary >> 16) ^ (stk->right_canary << 16) ^ ((long int) *stk->data >> 16) ^ ((long int) *stk->data << 16) ^ (stk->created >> 16) ^ (stk->created << 16);
 }
 #endif
 

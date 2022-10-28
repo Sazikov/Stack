@@ -11,48 +11,61 @@
 
 //#define CANARY_DEBUG
 //#define HASH_DEBUG
-#define VERIFICATOR(stack_name) \
-{\
-                    int res = StackVerificator (stack_name);\
-                    if (res == STACKPTRERR)\
-                    {\
-                        PrintErrors (res, __LINE__, __PRETTY_FUNCTION__, __FILE__);\
-                        return res;\
-                    }\
-                    StackDump (stack_name, __LINE__, __PRETTY_FUNCTION__, __FILE__);\
+
+#define VERIFICATOR(stack_name)                                                         \
+{                                                                                       \
+                    int res = StackVerificator (stack_name);                            \
+                    if (res == STACKPTRERR)                                             \
+                    {                                                                   \
+                        PrintErrors (res, __LINE__, __PRETTY_FUNCTION__, __FILE__);     \
+                        return res;                                                     \
+                    }                                                                   \
+                    StackDump (stack_name, __LINE__, __PRETTY_FUNCTION__, __FILE__);    \
 }
 
+#define ASSERT(res)  do {                                                               \
+                        if (res != NOERR)                                               \
+                            PrintErrors (res, __LINE__, __PRETTY_FUNCTION__, __FILE__); \
+                        } while (0)
 
+
+/*
+if (condition)
+    ASSERT(res)
+else
+    return 1;
+*/
 FILE* logs = fopen ("logs.txt", "w");
 
-int static Canary = 0;
+static int Canary = 0;
+
+const elem_t POISON = 777777;
+const elem_t CANARY = 0xDED32;
 
 int StackCtor (struct stack* stk, const int capacity)
 {
     if (stk == NULL)
         return STACKPTRERR;
 
-    if (stk->created == 1)
+    if (stk->created == Stack_CREATED)
         {
             PrintErrors (CREATED, __LINE__, __PRETTY_FUNCTION__, __FILE__);
             return CREATED;
         }
     else 
-        stk->created = 1; 
+        stk->created = Stack_CREATED; 
 
 
     #ifndef CANARY_DEBUG
         Canary = 1;
     #endif
 
-    void *temp_ptr = calloc (capacity + Canary + 1, sizeof (elem_t));
-    if (temp_ptr == NULL)
+    stk->data = (elem_t*)calloc (capacity + Canary + 1, sizeof (elem_t));
+    if (stk->data == NULL)
         return MEMERR;
 
-    stk->data = (elem_t*) temp_ptr;
     stk->capacity = capacity;
     stk->size = 0;
-
 
     #ifndef CANARY_DEBUG
         stk->left_canary = CANARY;
@@ -66,14 +79,14 @@ int StackCtor (struct stack* stk, const int capacity)
         stk->Stack_Hash = My_Stack_Hash (stk);
     #endif
 
-    PrintErrors (Poison (stk, 1, stk->capacity + 1), __LINE__, __PRETTY_FUNCTION__, __FILE__);
+    int reserr = Poison (stk, 1, stk->capacity + 1);
+    ASSERT(reserr);
 
     #ifndef HASH_DEBUG
         stk->Data_Hash = My_Data_Hash (stk);
         stk->Stack_Hash = My_Stack_Hash (stk);
     #endif
     VERIFICATOR(stk)
-
 
     return NOERR;
 }
@@ -115,7 +128,8 @@ elem_t StackPop(struct stack* stk)
 
     if (stk->size < stk->capacity / 4)
     {
-        PrintErrors(StackRealloc (stk, stk->capacity / 2), __LINE__, __PRETTY_FUNCTION__, __FILE__);
+        int reserr = StackRealloc (stk, stk->capacity / 2);
+        ASSERT(reserr);
     }
 
     #ifndef HASH_DEBUG
@@ -135,8 +149,10 @@ int StackPush (struct stack* stk, const elem_t elem)
 
     if (stk->size == stk->capacity)
     {
-        PrintErrors (StackRealloc (stk, stk->capacity * 2), __LINE__,  __PRETTY_FUNCTION__, __FILE__);
-        PrintErrors (Poison (stk, stk->size + 1, stk->capacity + 1), __LINE__, __PRETTY_FUNCTION__, __FILE__);
+        int reserr = StackRealloc (stk, stk->capacity * 2);
+        ASSERT(reserr);
+        reserr = Poison (stk, stk->size + 1, stk->capacity + 1);
+        ASSERT(reserr);
     }
 
     stk->data[stk->size + 1] = elem;
@@ -152,7 +168,7 @@ int StackPush (struct stack* stk, const elem_t elem)
     return NOERR;
 }
 
- int StackRealloc (struct stack* stk, const int newCapacity) 
+int StackRealloc (struct stack* stk, const int newCapacity) 
 {
     VERIFICATOR(stk)
 
@@ -242,7 +258,7 @@ void StackDump (struct stack* stk, const int line, const char* func, const char*
 
 int StackDtor (struct stack* stk)
 {
-    if (stk->created == -1)
+    if (stk->created == Stack_Destructed)
     {
         PrintErrors (CREATED, __LINE__, __PRETTY_FUNCTION__, __FILE__);
         return CREATED;
@@ -261,7 +277,7 @@ int StackDtor (struct stack* stk)
         stk->Data_Hash = 0;
         stk->Stack_Hash = 0;
     #endif
-
+    fclose(logs);
     return NOERR;
 }
 
@@ -292,6 +308,5 @@ long My_Stack_Hash (struct stack *stk)
 
 void PrintErrors (const int err, const int line, const char* func, const char* file)
 {
-    if (err != NOERR)
-        printf ("Error %i in line: %i in function: %s in file: %s\n", err, line, func, file);       
+    printf ("Error %i in line: %i in function: %s in file: %s\n", err, line, func, file);       
 }
